@@ -483,6 +483,7 @@ class YelpProcessor(DataProcessor):
 txtcls_processors = {
     "sst-2": Sst2Processor,
     "sst-5": Sst5Processor,
+    "ise-dsc01": IseDsc01Processor,
     "yahoo": YahooProcessor,
     "cola": CoLAProcessor,
     "trec": TrecProcessor,
@@ -496,6 +497,7 @@ txtcls_processors = {
 txtcls_output_modes = {
     "sst-2": "classification",
     "sst-5": "classification",
+    "ise-dsc01": "classification",
     "yahoo": "classification",
     "cola": "classification",
     "trec": "classification",
@@ -508,6 +510,7 @@ txtcls_output_modes = {
 txtcls_tasks_num_labels = {
     "sst-2": 2,
     "sst-5": 5,
+    "ise-dsc01": 3,
     "yahoo": 10,
     "cola": 2,
     "trec": 6,
