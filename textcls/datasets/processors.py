@@ -114,28 +114,19 @@ class IseDsc01Processor(DataProcessor):
             str(tensor_dict["label"].numpy()),
         )
 
-    def get_train_examples(self, data_dir, is_vm: bool = True):
+    def get_train_examples(self, data_dir):
         """See base class.
-        `is_vm` is use for run on Kaggle, Colab, ... or not
         """
-        if is_vm:
-            self._create_examples(self._read_json(data_dir), "train")
         return self._create_examples(self._read_json(os.path.join(data_dir, "train.json")), "train")
 
-    def get_dev_examples(self, data_dir, is_vm: bool = True):
+    def get_dev_examples(self, data_dir):
         """See base class.
-        `is_vm` is use for run on Kaggle, Colab, ... or not
         """
-        if is_vm:
-            self._create_examples(self._read_json(data_dir), "dev")
         return self._create_examples(self._read_json(os.path.join(data_dir, "dev.json")), "dev")
 
-    def get_test_examples(self, data_dir, is_vm: bool = True):
+    def get_test_examples(self, data_dir):
         """See base class.
-        `is_vm` is use for run on Kaggle, Colab, ... or not
         """
-        if is_vm:
-            self._create_examples(self._read_json(data_dir), "test")
         return self._create_examples(self._read_json(os.path.join(data_dir, "test.json")), "test")
 
     def get_labels(self):
