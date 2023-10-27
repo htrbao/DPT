@@ -24,7 +24,7 @@ model_base = {
     'fs_electra_add_label_init': 'google/electra-large-discriminator',
     'begin_with_labels_and_downline': 'google/electra-large-discriminator',
     'begin_with_labels': 'google/electra-large-discriminator',
-    'begin_with_sentiment_and_downline': 'google/electra-large-discriminator',
+    'begin_with_sentiment_and_downline': 'NlpHUST/electra-base-vn',
     'begin_with_sentiment': 'google/electra-large-discriminator',
 }
 
