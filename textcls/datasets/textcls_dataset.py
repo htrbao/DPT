@@ -90,16 +90,7 @@ class TxtclsDataset(Dataset):
                 mode = Split[mode]
             except KeyError:
                 raise KeyError("mode is not a valid split name")
-        # Load data features from cache or dataset file
-        cached_features_file = os.path.join(
-            cache_dir if cache_dir is not None else args.data_dir,
-            "cached_{}_{}_{}_{}".format(
-                mode.value,
-                tokenizer.__class__.__name__,
-                str(args.max_seq_length),
-                args.task_name,
-            ),
-        )
+
         label_list = self.processor.get_labels()
         label_texts = self.processor.get_label_texts()
         self.label_list = label_list
@@ -107,40 +98,26 @@ class TxtclsDataset(Dataset):
 
         # Make sure only the first process in distributed training processes the dataset,
         # and the others will use the cache.
-        lock_path = cached_features_file + ".lock"
-        with FileLock(lock_path):
-            if os.path.exists(cached_features_file) and not args.overwrite_cache:
-                start = time.time()
-                self.features = torch.load(cached_features_file)
-                logger.info(
-                    f"Loading features from cached file {cached_features_file} [took %.3f s]", time.time() - start
-                )
-            else:
-                logger.info(f"Creating features from dataset file at {args.data_dir}")
+     
 
-                if mode == Split.dev:
-                    examples = self.processor.get_dev_examples(args.data_dir)
-                elif mode == Split.test:
-                    examples = self.processor.get_test_examples(args.data_dir)
-                else:
-                    examples = self.processor.get_train_examples(args.data_dir)
-                    examples = self._sample_with_cls_ratio(examples, self.args.data_ratio, data_num=self.args.data_num, random_seed=self.args.random_seed)
-                if limit_length is not None:
-                    examples = examples[:limit_length]
-                self.features = txtcls_convert_examples_to_features(
-                    examples,
-                    tokenizer,
-                    max_length=args.max_seq_length,
-                    label_list=label_list,
-                    label_texts=label_texts,
-                    output_mode=self.output_mode,
-                )
-                start = time.time()
-                torch.save(self.features, cached_features_file)
-                # ^ This seems to take a lot of time so I want to investigate why and how we can improve.
-                logger.info(
-                    "Saving features into cached file %s [took %.3f s]", cached_features_file, time.time() - start
-                )
+        if mode == Split.dev:
+            examples = self.processor.get_dev_examples(args.data_dir)
+        elif mode == Split.test:
+            examples = self.processor.get_test_examples(args.data_dir)
+        else:
+            examples = self.processor.get_train_examples(args.data_dir)
+            examples = self._sample_with_cls_ratio(examples, self.args.data_ratio, data_num=self.args.data_num, random_seed=self.args.random_seed)
+        if limit_length is not None:
+            examples = examples[:limit_length]
+        self.features = txtcls_convert_examples_to_features(
+            examples,
+            tokenizer,
+            max_length=args.max_seq_length,
+            label_list=label_list,
+            label_texts=label_texts,
+            output_mode=self.output_mode,
+        )
+        start = time.time()
 
     def _sample_with_cls_ratio(self, examples, ratio, data_num=None, random_seed=None):
         if 1 <= ratio < 2:
