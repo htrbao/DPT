@@ -1,6 +1,7 @@
 from transformers import DataProcessor, InputExample
 import os
 import csv
+import json
 from tqdm import tqdm
 
 
@@ -113,6 +114,11 @@ class IseDsc01Processor(DataProcessor):
             None,
             str(tensor_dict["label"].numpy()),
         )
+    
+    def _read_json(self, input_file, quotechar=None):
+        """Reads a tab separated value file."""
+        with open(input_file, "r", encoding="utf-8-sig") as f:
+            return json.load(f)
 
     def get_train_examples(self, data_dir):
         """See base class.
@@ -142,7 +148,7 @@ class IseDsc01Processor(DataProcessor):
             return "2"
     @classmethod
     def get_label_texts(cls):
-        return ["SUPPORTED ,", "REFUTED ,", "NEI ,"]
+        return ["HỢP ,", "NGHỊCH ,", "TRUNG ,"]
 
     def _create_examples(self, objs, set_type):
         """Creates examples for the training, dev and test sets."""
