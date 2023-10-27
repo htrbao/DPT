@@ -38,7 +38,7 @@ class TxtClsDataTrainingArguments:
         metadata={"help": "The path to cache processed data."}
     )
     max_seq_length: int = field(
-        default=128,
+        default=256,
         metadata={
             "help": "The maximum total input sequence length after tokenization. Sequences longer "
             "than this will be truncated, sequences shorter will be padded."
