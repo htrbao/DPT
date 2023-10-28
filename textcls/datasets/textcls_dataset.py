@@ -117,7 +117,6 @@ class TxtclsDataset(Dataset):
             label_texts=label_texts,
             output_mode=self.output_mode,
         )
-        start = time.time()
 
     def _sample_with_cls_ratio(self, examples, ratio, data_num=None, random_seed=None):
         if 1 <= ratio < 2:
@@ -197,6 +196,7 @@ def txtcls_convert_examples_to_features(
     for i in range(len(examples)):
         inputs = {k: batch_encoding[k][i] for k in batch_encoding}
         inputs['label'] = labels[i]
+        inputs['guid'] = examples[i].guid
         # feature = InputFeatures(**inputs, label=labels[i])
         feature = inputs
         features.append(feature)
