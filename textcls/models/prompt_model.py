@@ -369,7 +369,7 @@ class BeginWithSentimentAndDownline(ElectraPreTrainedModel):
 
         self.tokenizer = tokenizer
         self.labels = txtcls_processors[data_args.task_name].get_label_texts()
-        self.prompts = ["diễn đạt ngữ nghĩa", ":", "_"] # sst2
+        self.prompts = ["nghĩa", ":", "_"] # sst2
         # self.prompts = ["label", ":", "_"] # sst5
         # self.prompts = ["category", ":", "_"] # trec
         self.loss_func = model_args.loss_func
