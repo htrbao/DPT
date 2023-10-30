@@ -148,7 +148,7 @@ class IseDsc01Processor(DataProcessor):
             return "2"
     @classmethod
     def get_label_texts(cls):
-        return ["hợp ,", "ngược ,", "trung ,"]
+        return ["đồng thuận ,", "trái ngược ,", "không liên quan ,"]
 
     def _create_examples(self, objs, set_type):
         """Creates examples for the training, dev and test sets."""
