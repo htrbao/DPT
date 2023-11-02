@@ -4,6 +4,7 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import List, Optional, Union, Callable, Dict
+import re
 
 import torch
 from torch.utils.data.dataset import Dataset
@@ -17,6 +18,14 @@ from transformers import glue_convert_examples_to_features
 from textcls.datasets.processors import txtcls_processors, txtcls_output_modes
 
 logger = logging.get_logger(__name__)
+
+
+def preprocess_text(text: str) -> str:    
+    text = re.sub(r"['\",\.\?:\-!]", "", text)
+    text = text.strip()
+    text = " ".join(text.split())
+    # text = text.lower()
+    return text
 
 
 @dataclass
@@ -185,7 +194,7 @@ def txtcls_convert_examples_to_features(
     labels = [label_from_example(example) for example in examples]
 
     batch_encoding = tokenizer(
-        [(example.text_a, example.text_b) for example in examples],
+        [(preprocess_text(example.text_a), preprocess_text(example.text_b)) for example in examples],
         max_length=max_length,
         padding="max_length",
         truncation=True,
